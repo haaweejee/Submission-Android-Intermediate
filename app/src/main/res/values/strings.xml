@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="name">Name</string>
+    <string name="hint_name">Enter Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="have_account">Have Account?</string>
+    <string name="please_login">Please Login</string>
+    <string name="application_logo">application Logo</string>
+    <string name="login">Login</string>
+    <string name="not_have_account">Not have Account?</string>
+    <string name="please_register">Please Register</string>
+    <string name="add_story_button">Button Add Story</string>
+    <string name="upload">Upload</string>
+    <string name="thumnail_image">thumbnail image</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="hint_description">Enter Photo Description</string>
+    <string name="description">Description</string>
+    <string name="change_language">Change Language</string>
+    <string name="logout">Logout</string>
+    <string name="hint_email">Enter Email</string>
+    <string name="hint_password">Enter Password</string>
+    <string name="story_detail">Story Detail</string>
+    <string name="add_story">Add Story</string>
+    <string name="upload_success">Upload Success</string>
+</resources>
