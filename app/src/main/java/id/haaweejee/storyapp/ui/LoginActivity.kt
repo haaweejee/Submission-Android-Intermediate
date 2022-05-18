@@ -6,11 +6,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import id.haaweejee.storyapp.databinding.ActivityLoginBinding
 import id.haaweejee.storyapp.service.data.login.LoginRequest
 import id.haaweejee.storyapp.service.preferences.SettingsPreference
@@ -28,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
     //ViewModel
     private lateinit var viewModel: UserViewModel
     private lateinit var prefViewModel: PreferencesViewModel
+    private var emailCondition = false
+    private var passwordCondition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,16 +53,21 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             login()
-            prefViewModel.saveLoginState(true)
         }
 
         viewModel.loginResponse.observe(this){
             if (it != null){
-                showLoading(false)
-                intent = Intent(this, MainActivity::class.java)
-                prefViewModel.saveBearerToken(it.loginResult?.token!!)
-                startActivity(intent)
-                finish()
+                if (it.error == true){
+                    showLoading(false)
+                    Snackbar.make(binding.root, "Login gagal cobalah beberapa saat lagi", Toast.LENGTH_SHORT).show()
+                }else{
+                    showLoading(false)
+                    intent = Intent(this, MainActivity::class.java)
+                    prefViewModel.saveLoginState(true)
+                    prefViewModel.saveBearerToken(it.loginResult?.token!!)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
 
@@ -68,8 +78,45 @@ class LoginActivity : AppCompatActivity() {
     private fun login(){
         val email = binding.edtEmail.text?.toString()?.trim()
         val password = binding.edtPassword.text?.toString()?.trim()
-        viewModel.userLogin(LoginRequest(email, password))
-        showLoading(true)
+
+        if (email != null) {
+            when{
+                email.isEmpty() -> {
+                    binding.tlEmail.error = "Silahkan masukkan Email"
+                    emailCondition = false
+                }
+                !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->{
+                    binding.tlEmail.error = "Email tidak valid"
+                    emailCondition = false
+                }
+                else -> {
+                    binding.tlEmail.error = null
+                    emailCondition = true
+                }
+            }
+        }
+
+        if (password != null) {
+            when {
+                password.isEmpty() -> {
+                    binding.tlPassword.error = "Silahkan masukkan password"
+                    passwordCondition = false
+                }
+                password.length < 6 -> {
+                    binding.tlPassword.error = "Password harus lebih dari 6 huruf"
+                    passwordCondition = false
+                }
+                else -> {
+                    binding.tlPassword.error = null
+                    passwordCondition = true
+                }
+            }
+        }
+
+        if (emailCondition && passwordCondition){
+            viewModel.userLogin(LoginRequest(email, password))
+            showLoading(true)
+        }
     }
 
     private fun showLoading(state: Boolean) {

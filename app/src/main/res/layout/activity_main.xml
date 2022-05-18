@@ -21,7 +21,7 @@
         android:src="@drawable/ic_add"
         app:tint="@color/white"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/rv_story"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

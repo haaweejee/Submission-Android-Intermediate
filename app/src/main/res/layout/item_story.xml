@@ -9,10 +9,10 @@
     <ImageView
         android:id="@+id/storyPhoto"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="350dp"
         android:scaleType="fitXY"
+        android:src="@drawable/placeholder"
         android:transitionName="photo"
-        android:background="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

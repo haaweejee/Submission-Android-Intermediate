@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.datastore.core.DataStore
@@ -20,7 +22,11 @@ import id.haaweejee.storyapp.databinding.ActivityMainBinding
 import id.haaweejee.storyapp.service.data.liststory.StoryResults
 import id.haaweejee.storyapp.service.preferences.SettingsPreference
 import id.haaweejee.storyapp.ui.adapter.ListStoryAdapter
+import id.haaweejee.storyapp.ui.adapter.LoadingStateAdapter
 import id.haaweejee.storyapp.utils.ViewModelFactory
+import id.haaweejee.storyapp.utils.getBitmap
+import id.haaweejee.storyapp.utils.rotateBitmap
+import id.haaweejee.storyapp.viewmodel.ListStoryViewModel
 import id.haaweejee.storyapp.viewmodel.PreferencesViewModel
 import id.haaweejee.storyapp.viewmodel.StoryViewModel
 
@@ -28,22 +34,28 @@ class MainActivity : AppCompatActivity() {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var storyViewModel: StoryViewModel
+    private val storyViewModel: ListStoryViewModel by viewModels{
+        id.haaweejee.storyapp.viewmodel.ViewModelFactory(this)
+    }
     private lateinit var prefViewModel : PreferencesViewModel
     private lateinit var adapter : ListStoryAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        storyViewModel = ViewModelProvider(this)[StoryViewModel::class.java]
         val pref = SettingsPreference.getInstance(dataStore)
         prefViewModel = ViewModelProvider(this, ViewModelFactory(pref))[PreferencesViewModel::class.java]
         prefViewModel.getBearerToken().observe(this){
             val bearer = "Bearer $it"
-            storyViewModel.getAllStory(bearer)
+            Log.d("MainActivity", bearer)
             showLoading(true)
+            storyViewModel.getListStory(bearer).observe(this@MainActivity){ data ->
+                showLoading(false)
+                adapter.submitData(lifecycle, data)
+            }
         }
 
         adapter = ListStoryAdapter()
@@ -57,13 +69,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             rvStory.layoutManager = LinearLayoutManager(this@MainActivity)
-            rvStory.adapter = adapter
+            rvStory.adapter = adapter.withLoadStateFooter(
+                footer = LoadingStateAdapter{
+                    adapter.retry()
+                }
+            )
             rvStory.setHasFixedSize(true)
-
-            storyViewModel.listStory.observe(this@MainActivity){
-                showLoading(false)
-                adapter.setData(it)
-            }
         }
 
         binding.btnAddStory.setOnClickListener {
@@ -80,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.home_menu, menu)
         return true
