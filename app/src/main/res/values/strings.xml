@@ -9,8 +9,8 @@
     <string name="please_login">Please Login</string>
     <string name="application_logo">application Logo</string>
     <string name="login">Login</string>
-    <string name="not_have_account">Not have Account?</string>
-    <string name="please_register">Please Register</string>
+    <string name="not_have_account"> Not have Account?</string>
+    <string name="please_register"> Please Register</string>
     <string name="add_story_button">Button Add Story</string>
     <string name="upload">Upload</string>
     <string name="thumnail_image">thumbnail image</string>
@@ -25,4 +25,10 @@
     <string name="story_detail">Story Detail</string>
     <string name="add_story">Add Story</string>
     <string name="upload_success">Upload Success</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="check_location">Cek Lokasi</string>
+    <string name="back_button">Tombol Kembali</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="retry">Retry</string>
 </resources>

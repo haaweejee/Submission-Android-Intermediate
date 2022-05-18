@@ -10,8 +10,8 @@
     <string name="please_login">Silahkan Masuk</string>
     <string name="application_logo">logo_aplikasi</string>
     <string name="login">Masuk</string>
-    <string name="not_have_account">Belum Punya Akun?</string>
-    <string name="please_register">Silahkan Daftar</string>
+    <string name="not_have_account"> Belum Punya Akun?</string>
+    <string name="please_register"> Silahkan Daftar</string>
     <string name="add_story_button">Tombol Tambah cerita</string>
     <string name="upload">Upload</string>
     <string name="thumnail_image">thumbnail image</string>
