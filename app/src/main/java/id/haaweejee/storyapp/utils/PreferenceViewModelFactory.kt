@@ -6,7 +6,7 @@ import id.haaweejee.storyapp.service.preferences.SettingsPreference
 import id.haaweejee.storyapp.viewmodel.PreferencesViewModel
 import java.lang.IllegalArgumentException
 
-class ViewModelFactory(private val pref: SettingsPreference) : ViewModelProvider.NewInstanceFactory() {
+class PreferenceViewModelFactory(private val pref: SettingsPreference) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

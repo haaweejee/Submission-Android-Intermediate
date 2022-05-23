@@ -27,4 +27,24 @@ class PreferencesViewModel(private val pref: SettingsPreference) : ViewModel() {
             pref.saveBearerToken(bearerKey)
         }
     }
+
+    fun getUsername () : LiveData <String>{
+        return pref.getUserName().asLiveData()
+    }
+
+    fun saveUsername (username : String){
+        viewModelScope.launch {
+            pref.saveUserName(username)
+        }
+    }
+
+    fun getSplashState() : LiveData <Boolean>{
+        return pref.splashScreenShow().asLiveData()
+    }
+
+    fun saveSplashState(isShow : Boolean){
+        viewModelScope.launch {
+            pref.saveSplashState(isShow)
+        }
+    }
 }

@@ -3,16 +3,17 @@ package id.haaweejee.storyapp.ui
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityRegisterBinding
 import id.haaweejee.storyapp.service.data.register.RegisterRequest
+import id.haaweejee.storyapp.utils.InteractionUtils.hideKeyboard
 import id.haaweejee.storyapp.viewmodel.UserViewModel
 
 class RegisterActivity : AppCompatActivity() {
@@ -37,6 +38,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.btnRegister.setOnClickListener {
+            hideKeyboard()
             signUp()
         }
 
@@ -48,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
             }else{
                 showLoading(false)
                 Log.d("Results: ", it.message)
-                Snackbar.make(binding.root, "Register Gagal", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.register_failed), Snackbar.LENGTH_SHORT).show()
             }
 
         }
@@ -67,9 +69,11 @@ class RegisterActivity : AppCompatActivity() {
         val email = binding.edtEmail.text.toString().trim()
         val password = binding.edtPassword.text.toString().trim()
 
+        binding.btnRegister.isClickable = false
+
         when{
             name.isEmpty() -> {
-                binding.tlName.error = "Silahkan masukkan Nama"
+                binding.tlName.error = getString(R.string.please_enter_name)
                 nameCondition = false
             }
             else -> {
@@ -80,11 +84,11 @@ class RegisterActivity : AppCompatActivity() {
 
         when{
             email.isEmpty() -> {
-                binding.tlEmail.error = "Silahkan masukkan Email"
+                binding.tlEmail.error = getString(R.string.please_enter_your_email)
                 emailCondition = false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->{
-                binding.tlEmail.error = "Email tidak valid"
+                binding.tlEmail.error = getString(R.string.email_not_valid)
                 emailCondition = false
             }
             else -> {
@@ -95,11 +99,11 @@ class RegisterActivity : AppCompatActivity() {
 
         when {
             password.isEmpty() -> {
-                binding.tlPassword.error = "Silahkan masukkan password"
+                binding.tlPassword.error = getString(R.string.please_enter_your_password)
                 passwordCondition = false
             }
             password.length < 6 -> {
-                binding.tlPassword.error = "Password harus lebih dari 6 huruf"
+                binding.tlPassword.error = getString(R.string.password_less_6_word)
                 passwordCondition = false
             }
             else -> {

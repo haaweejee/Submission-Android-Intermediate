@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import id.haaweejee.storyapp.di.Injection
 import id.haaweejee.storyapp.service.StoryRepository
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
+import id.haaweejee.storyapp.service.data.liststory.StoryEntity
 
 class ListStoryViewModel constructor(private val storyRepository: StoryRepository) : ViewModel() {
-    fun getListStory(bearer: String) : LiveData<PagingData<StoryResults>> = storyRepository.getAllStory(bearer)
+    fun getListStory(bearer: String) : LiveData<PagingData<StoryEntity>> = storyRepository.getAllStory(bearer)
 }
 
 class ViewModelFactory(private val context: Context) : ViewModelProvider.Factory{

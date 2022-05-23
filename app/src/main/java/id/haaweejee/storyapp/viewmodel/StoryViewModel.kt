@@ -1,15 +1,13 @@
 package id.haaweejee.storyapp.viewmodel
 
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import id.haaweejee.storyapp.di.Injection
-import id.haaweejee.storyapp.service.StoryRepository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import id.haaweejee.storyapp.service.api.ApiConfig
 import id.haaweejee.storyapp.service.data.addstory.AddStoryResponse
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
+import id.haaweejee.storyapp.service.data.liststory.StoryResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -19,6 +17,24 @@ class StoryViewModel : ViewModel() {
 
     private val _addStory = MutableLiveData<AddStoryResponse>()
     val addStory : LiveData<AddStoryResponse> = _addStory
+
+    private val _listStory = MutableLiveData<StoryResponse>()
+    val listStory : LiveData<StoryResponse> = _listStory
+
+    fun getListStory(bearer: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val client = ApiConfig.apiInstance.getListMapStories(bearer)
+                if (client.isSuccessful){
+                    _listStory.postValue(client.body())
+                }else{
+                    _listStory.postValue(StoryResponse(error = true, listStory = emptyList()))
+                }
+            }catch (ex: Exception){
+                Log.d("Error", ex.toString())
+            }
+        }
+    }
 
     fun addStory(bearer: String, description: RequestBody, photo: MultipartBody.Part, lat: RequestBody? = null, lon: RequestBody? = null){
         viewModelScope.launch(Dispatchers.IO) {

@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityAddStoryBinding
 import id.haaweejee.storyapp.service.preferences.SettingsPreference
-import id.haaweejee.storyapp.utils.ViewModelFactory
+import id.haaweejee.storyapp.utils.PreferenceViewModelFactory
 import id.haaweejee.storyapp.utils.reduceFileImage
 import id.haaweejee.storyapp.utils.rotateBitmap
 import id.haaweejee.storyapp.utils.uriToFile
@@ -40,21 +40,11 @@ import java.io.File
 class AddStoryActivity : AppCompatActivity() {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-    companion object {
-        const val CAMERA_X_RESULT = 200
-
-        private val REQUIRED_PERMISSIONS_CAMERA = arrayOf(Manifest.permission.CAMERA)
-        private val REQUIRED_PERMISSIONS_LOCATION =
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        private const val REQUEST_CODE_CAMERA = 10
-        private const val REQUEST_CODE_LOCATION = 11
-
-
-    }
-
-    var mLocation: Location? = null
+    private var mLocation: Location? = null
     private var latLng: String? = null
     private var lonLng: String? = null
+    private var getFile: File? = null
+
 
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var storyViewModel: StoryViewModel
@@ -71,7 +61,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (!allPermissionGranted()) {
                 Toast.makeText(
                     this,
-                    "Tidak mendapatkan permission.",
+                    getString(R.string.not_got_permission),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
@@ -105,7 +95,7 @@ class AddStoryActivity : AppCompatActivity() {
         storyViewModel = ViewModelProvider(this)[StoryViewModel::class.java]
         val pref = SettingsPreference.getInstance(dataStore)
         prefViewModel =
-            ViewModelProvider(this, ViewModelFactory(pref))[PreferencesViewModel::class.java]
+            ViewModelProvider(this, PreferenceViewModelFactory(pref))[PreferencesViewModel::class.java]
 
         storyViewModel.addStory.observe(this) {
             if (it != null) {
@@ -113,7 +103,7 @@ class AddStoryActivity : AppCompatActivity() {
                     showLoading(false)
                     Snackbar.make(
                         binding.root,
-                        "Upload gagal, Silahkan coba lagi",
+                        getString(R.string.upload_failed),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -143,8 +133,6 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private var getFile: File? = null
-
     private fun uploadImage() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
@@ -154,17 +142,17 @@ class AddStoryActivity : AppCompatActivity() {
             val long = binding.edtLongitude.text.toString().trim()
 
             when {
-                description.isEmpty() -> binding.tlDescription.error = "Belum ada deskripsi Cerita"
+                description.isEmpty() -> binding.tlDescription.error = getString(R.string.description_not_yet_added)
                 description.isNotEmpty() -> binding.tlDescription.error = null
             }
 
             when {
-                lat.isEmpty() -> binding.tlLatitude.error = "Belum ada latitude, silahkan masukkan otomatis"
+                lat.isEmpty() -> binding.tlLatitude.error = getString(R.string.please_add_location)
                 lat.isNotEmpty() -> binding.tlLatitude.error = null
             }
 
             when{
-                long.isEmpty() -> binding.tlLongitude.error = "Belum ada longitude, silahkan masukkan otomatis"
+                long.isEmpty() -> binding.tlLongitude.error = getString(R.string.longitude_not_yet_added)
                 long.isNotEmpty() -> binding.tlLongitude.error = null
             }
 
@@ -186,7 +174,7 @@ class AddStoryActivity : AppCompatActivity() {
             }
 
         } else {
-            Snackbar.make(binding.root, "Upload gagal, Jangan lupa untuk masukkan Gambar", Toast.LENGTH_SHORT)
+            Snackbar.make(binding.root, getString(R.string.upload_failed_please_enter_photo), Toast.LENGTH_SHORT)
                 .show()
         }
     }
@@ -273,5 +261,16 @@ class AddStoryActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+
+    companion object {
+        const val CAMERA_X_RESULT = 200
+
+        private val REQUIRED_PERMISSIONS_CAMERA = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS_LOCATION =
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        private const val REQUEST_CODE_CAMERA = 10
+        private const val REQUEST_CODE_LOCATION = 11
     }
 }

@@ -30,6 +30,12 @@ interface ApiService {
         @Query("location") location: String = "1"
     ): StoryResponse
 
+    @GET("stories")
+    suspend fun getListMapStories(
+        @Header("Authorization") bearer: String,
+        @Query("location") location: String = "1"
+    ): Response<StoryResponse>
+
     @Multipart
     @POST("stories")
     suspend fun postStories(

@@ -4,41 +4,25 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityMainBinding
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
 import id.haaweejee.storyapp.service.preferences.SettingsPreference
-import id.haaweejee.storyapp.ui.adapter.ListStoryAdapter
-import id.haaweejee.storyapp.ui.adapter.LoadingStateAdapter
-import id.haaweejee.storyapp.utils.ViewModelFactory
-import id.haaweejee.storyapp.utils.getBitmap
-import id.haaweejee.storyapp.utils.rotateBitmap
-import id.haaweejee.storyapp.viewmodel.ListStoryViewModel
+import id.haaweejee.storyapp.utils.PreferenceViewModelFactory
 import id.haaweejee.storyapp.viewmodel.PreferencesViewModel
-import id.haaweejee.storyapp.viewmodel.StoryViewModel
 
 class MainActivity : AppCompatActivity() {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     private lateinit var binding: ActivityMainBinding
-    private val storyViewModel: ListStoryViewModel by viewModels{
-        id.haaweejee.storyapp.viewmodel.ViewModelFactory(this)
-    }
-    private lateinit var prefViewModel : PreferencesViewModel
-    private lateinit var adapter : ListStoryAdapter
+    private lateinit var prefViewModel: PreferencesViewModel
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,49 +31,37 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val pref = SettingsPreference.getInstance(dataStore)
-        prefViewModel = ViewModelProvider(this, ViewModelFactory(pref))[PreferencesViewModel::class.java]
-        prefViewModel.getBearerToken().observe(this){
-            val bearer = "Bearer $it"
-            Log.d("MainActivity", bearer)
-            showLoading(true)
-            storyViewModel.getListStory(bearer).observe(this@MainActivity){ data ->
-                showLoading(false)
-                adapter.submitData(lifecycle, data)
-            }
-        }
-
-        adapter = ListStoryAdapter()
-        adapter.setOnItemClick(object : ListStoryAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: StoryResults, optionsCompat: ActivityOptionsCompat) {
-                intent = Intent(this@MainActivity, StoryDetailActivity::class.java)
-                intent.putExtra(StoryDetailActivity.STORY_DETAIL, data)
-                startActivity(intent, optionsCompat.toBundle())
-            }
-        })
+        prefViewModel =
+            ViewModelProvider(
+                this,
+                PreferenceViewModelFactory(pref)
+            )[PreferencesViewModel::class.java]
 
         binding.apply {
-            rvStory.layoutManager = LinearLayoutManager(this@MainActivity)
-            rvStory.adapter = adapter.withLoadStateFooter(
-                footer = LoadingStateAdapter{
-                    adapter.retry()
-                }
-            )
-            rvStory.setHasFixedSize(true)
+            bottomNav.background = null
         }
 
         binding.btnAddStory.setOnClickListener {
             intent = Intent(this, AddStoryActivity::class.java)
             startActivity(intent)
         }
-    }
 
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.progressCircular.visibility = View.VISIBLE
-        } else {
-            binding.progressCircular.visibility = View.GONE
+        setCurrentFragment(HomeFragment())
+        binding.bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> setCurrentFragment(HomeFragment())
+                R.id.mapList -> setCurrentFragment(MapsFragment())
+                else -> setCurrentFragment(HomeFragment())
+            }
+            true
         }
     }
+
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frameLayout, fragment)
+            commit()
+        }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
@@ -106,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             prefViewModel.saveLoginState(false)
             prefViewModel.saveBearerToken("")
             intent = Intent(this, LoginActivity::class.java)
+            finish()
             startActivity(intent)
             true
         }

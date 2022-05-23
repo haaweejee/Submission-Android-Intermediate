@@ -6,19 +6,28 @@
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_add.xml" value="0.22" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_back.xml" value="0.22" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_capture.xml" value="0.115" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_circle.xml" value="0.1155" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_next.xml" value="0.22" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_story.xml" value="0.22" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/ic_switch_camera.xml" value="0.115" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/drawable/rounded_circle.xml" value="0.22" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_add_story.xml" value="0.18" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_camera.xml" value="0.5" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_login.xml" value="0.125" />
-        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
-        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_maps.xml" value="0.45" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_main.xml" value="0.2763888888888889" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_maps.xml" value="0.23032407407407407" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_onboarding.xml" value="0.25052083333333336" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_splash_screen.xml" value="0.25052083333333336" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/activity_story_detail.xml" value="0.22" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/custom.xml" value="0.10260416666666666" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/custom_info_windows.xml" value="0.25" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/fragment_home.xml" value="0.25052083333333336" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/fragment_profile.xml" value="0.2359375" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/fragment_splash.xml" value="0.10416666666666667" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/item_loading.xml" value="0.45" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/layout/item_story.xml" value="0.25" />
+        <entry key="..\:/Project/Android/StoryApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.103125" />
         <entry key="..\:/Project/Android/StoryApp/app/src/main/res/menu/home_menu.xml" value="0.33" />
       </map>
     </option>

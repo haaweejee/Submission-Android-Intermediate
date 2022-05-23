@@ -2,11 +2,11 @@ package id.haaweejee.storyapp.ui
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityCameraBinding
 import id.haaweejee.storyapp.utils.createFile
-import java.lang.Exception
 
 class CameraActivity : AppCompatActivity() {
 
@@ -69,7 +68,7 @@ class CameraActivity : AppCompatActivity() {
             }catch (ex: Exception){
                 Toast.makeText(
                     this@CameraActivity,
-                    "Gagal memunculkan kamera.",
+                    getString(R.string.camera_not_shown),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -98,7 +97,7 @@ class CameraActivity : AppCompatActivity() {
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    Toast.makeText(this@CameraActivity, "Gagal Mengambil Gambar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@CameraActivity, getString(R.string.failed_take_picture), Toast.LENGTH_SHORT).show()
                 }
 
             }

@@ -4,7 +4,7 @@ package id.haaweejee.storyapp.ui.adapter
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
@@ -13,21 +13,19 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import id.haaweejee.storyapp.R
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import id.haaweejee.storyapp.databinding.ItemStoryBinding
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
+import id.haaweejee.storyapp.service.data.liststory.StoryEntity
 import id.haaweejee.storyapp.utils.getBitmap
 import id.haaweejee.storyapp.utils.rotateBitmap
-import id.haaweejee.storyapp.utils.uriToFile
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class ListStoryAdapter :
-    PagingDataAdapter<StoryResults, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
+    PagingDataAdapter<StoryEntity, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
@@ -37,7 +35,7 @@ class ListStoryAdapter :
 
     inner class ListViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        internal fun bind(story: StoryResults) {
+        internal fun bind(story: StoryEntity) {
             binding.root.setOnClickListener {
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -48,15 +46,22 @@ class ListStoryAdapter :
                 onItemClickCallback?.onItemClicked(story, optionsCompat)
 
             }
+
             binding.tvUsername.text = story.name
-            GlobalScope.launch {
-                binding.storyPhoto.load(
-                    rotateBitmap(
-                        getBitmap(story.photoUrl, itemView.context),
-                        true
-                    )
-                )
-            }
+            Glide.with(itemView.context)
+                .asBitmap()
+                .load(story.photoUrl)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        binding.storyPhoto.setImageBitmap(rotateBitmap(resource, true))
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
         }
     }
 
@@ -77,16 +82,16 @@ class ListStoryAdapter :
 
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: StoryResults, optionsCompat: ActivityOptionsCompat)
+        fun onItemClicked(data: StoryEntity, optionsCompat: ActivityOptionsCompat)
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryResults>() {
-            override fun areItemsTheSame(oldItem: StoryResults, newItem: StoryResults): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryEntity>() {
+            override fun areItemsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: StoryResults, newItem: StoryResults): Boolean {
+            override fun areContentsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean {
                 return oldItem.id == newItem.id
             }
         }

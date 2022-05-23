@@ -1,10 +1,14 @@
 package id.haaweejee.storyapp.ui
 
+import android.content.Context
 import android.content.res.Resources
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,17 +18,18 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityMapsBinding
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
+import id.haaweejee.storyapp.service.data.liststory.StoryEntity
+import id.haaweejee.storyapp.utils.DateFormatter.formatDateAndTime
+import id.haaweejee.storyapp.utils.DateFormatter.formatDateAndTimeO
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    companion object {
-        const val PHOTO_LOCATION = "photoLocation"
-
-    }
-
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,30 +56,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
 
-        val data = intent.getParcelableExtra<StoryResults>(PHOTO_LOCATION)
-
-        // Add a marker in Sydney and move the camera
+        val data = intent.getParcelableExtra<StoryEntity>(DATA)
 
         val photoLocation = LatLng(data?.lat!!.toDouble(), data.lon!!.toDouble())
+        val photoCreate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatDateAndTimeO(data.createdAt.toString(), TimeZone.getDefault().id)
+        } else {
+            formatDateAndTime(data.createdAt.toString())
+        }
         mMap.addMarker(
             MarkerOptions()
                 .position(photoLocation)
                 .title("Photo : ${data.name}")
-                .snippet("${data.createdAt}")
+                .snippet(
+                    "Time Created : $photoCreate"
+                )
         )
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(photoLocation, 15f))
         setMapStyle()
 
     }
 
-    private fun setMapStyle(){
-        try{
-            val success = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
-            if (!success){
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
                 Log.e("error", "style parsing failed")
             }
-        }catch (exception: Resources.NotFoundException){
+        } catch (exception: Resources.NotFoundException) {
             Log.e("error", "Can't find style, Error: ", exception)
         }
+    }
+
+    companion object {
+        const val DATA = "data"
     }
 }

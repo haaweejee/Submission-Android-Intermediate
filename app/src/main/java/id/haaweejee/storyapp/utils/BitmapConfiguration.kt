@@ -14,8 +14,6 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import id.haaweejee.storyapp.R
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,10 +77,6 @@ fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {
             true
         )
     }
-}
-
-fun stringToUri(url : String?) : Uri{
-    return Uri.parse(url)
 }
 
 fun uriToFile(selectedImg: Uri, context: Context): File{
