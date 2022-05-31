@@ -1,38 +1,41 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package id.haaweejee.storyapp.ui.adapter
 
 import android.app.Activity
-import android.util.Log
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import id.haaweejee.storyapp.databinding.ItemStoryBinding
-import id.haaweejee.storyapp.service.data.liststory.StoryResults
+import id.haaweejee.storyapp.service.data.liststory.StoryEntity
+import id.haaweejee.storyapp.utils.getBitmap
 import id.haaweejee.storyapp.utils.rotateBitmap
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class ListStoryAdapter : RecyclerView.Adapter<ListStoryAdapter.ListViewHolder>() {
-
-    private val listStory = ArrayList<StoryResults>()
-
+class ListStoryAdapter :
+    PagingDataAdapter<StoryEntity, ListStoryAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
     private var onItemClickCallback: OnItemClickCallback? = null
 
-    fun setOnItemClick(onItemClickCallback: OnItemClickCallback){
+    fun setOnItemClick(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    fun setData(story: List<StoryResults>){
-        listStory.clear()
-        listStory.addAll(story)
-        notifyDataSetChanged()
-        Log.d("TAG", "cek item masuk $listStory")
-    }
-
-    inner class ListViewHolder(private val binding: ItemStoryBinding) : RecyclerView.ViewHolder(binding.root){
-        internal fun bind(story: StoryResults){
+    inner class ListViewHolder(private val binding: ItemStoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        internal fun bind(story: StoryEntity) {
             binding.root.setOnClickListener {
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -43,11 +46,22 @@ class ListStoryAdapter : RecyclerView.Adapter<ListStoryAdapter.ListViewHolder>()
                 onItemClickCallback?.onItemClicked(story, optionsCompat)
 
             }
+
             binding.tvUsername.text = story.name
             Glide.with(itemView.context)
+                .asBitmap()
                 .load(story.photoUrl)
-                .apply(RequestOptions().override(200,200))
-                .into(binding.storyPhoto)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        binding.storyPhoto.setImageBitmap(rotateBitmap(resource, true))
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
         }
     }
 
@@ -60,13 +74,26 @@ class ListStoryAdapter : RecyclerView.Adapter<ListStoryAdapter.ListViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val user = listStory[position]
-        holder.bind(user)
+        val data = getItem(position)
+        if (data != null) {
+            holder.bind(data)
+        }
     }
 
-    override fun getItemCount(): Int = listStory.size
 
-    interface OnItemClickCallback{
-        fun onItemClicked(data: StoryResults, optionsCompat: ActivityOptionsCompat)
+    interface OnItemClickCallback {
+        fun onItemClicked(data: StoryEntity, optionsCompat: ActivityOptionsCompat)
+    }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryEntity>() {
+            override fun areItemsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: StoryEntity, newItem: StoryEntity): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
     }
 }

@@ -6,8 +6,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Environment
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import id.haaweejee.storyapp.R
 import java.io.*
 import java.text.SimpleDateFormat
@@ -35,6 +39,16 @@ fun createFile(application: Application): File {
     ) mediaDir else application.filesDir
 
     return File(outputDirectory, "$timeStamp.jpg")
+}
+
+suspend fun getBitmap(urlPhoto : String?, context: Context) : Bitmap{
+    val loading = ImageLoader(context)
+    val request = ImageRequest.Builder(context)
+        .data(urlPhoto)
+        .build()
+
+    val result = (loading.execute(request) as SuccessResult).drawable
+    return (result as BitmapDrawable).bitmap
 }
 
 fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {

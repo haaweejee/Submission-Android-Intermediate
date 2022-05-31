@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/photoDetails"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="350dp"
         android:scaleType="fitXY"
         android:background="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +57,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescription"
         tools:text="Description" />
+
+    <Button
+        android:id="@+id/btnMaps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/check_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescriptionValue" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

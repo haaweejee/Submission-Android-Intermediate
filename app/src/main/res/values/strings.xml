@@ -9,8 +9,8 @@
     <string name="please_login">Please Login</string>
     <string name="application_logo">application Logo</string>
     <string name="login">Login</string>
-    <string name="not_have_account">Not have Account?</string>
-    <string name="please_register">Please Register</string>
+    <string name="not_have_account"> Not have Account?</string>
+    <string name="please_register"> Please Register</string>
     <string name="add_story_button">Button Add Story</string>
     <string name="upload">Upload</string>
     <string name="thumnail_image">thumbnail image</string>
@@ -25,4 +25,36 @@
     <string name="story_detail">Story Detail</string>
     <string name="add_story">Add Story</string>
     <string name="upload_success">Upload Success</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="latitude" translatable="false">Latitude</string>
+    <string name="longitude" translatable="false">Longitude</string>
+    <string name="retry">Retry</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="not_got_permission">Permission Denied</string>
+    <string name="description_not_yet_added">Belum ada deskripsi Cerita</string>
+    <string name="please_add_location">Latitude not found, please add using location button</string>
+    <string name="longitude_not_yet_added">Longitude not found, please add using location button</string>
+    <string name="email_not_valid">Email Not Valid</string>
+    <string name="please_enter_your_password">Silahkan masukkan password</string>
+    <string name="password_less_6_word">Password must have 6 words</string>
+    <string name="welcome_title">Welcome to Story App</string>
+    <string name="story_title" translatable="false">Story</string>
+    <string name="register_failed">Register Failed</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="check_location">Check Location</string>
+    <string name="back_button">Back Button</string>
+    <string name="skip">SKIP</string>
+    <string name="upload_failed">Upload Failed, Please try a</string>
+    <string name="account">Account</string>
+    <string name="please_enter_name">Please Enter your name</string>
+    <string name="get_location_automate">Get Location Automate</string>
+    <string name="look_story_subtitle">Look Story with location</string>
+    <string name="look_story_title">Look Story</string>
+    <string name="add_story_subtitle">Share your story to the World</string>
+    <string name="add_story_title">Add Story</string>
+    <string name="please_enter_your_email">Please enter you email</string>
+    <string name="login_failed_please_try_later">Login Failed, Please try again later.</string>
+    <string name="failed_take_picture">Failed Take Picture</string>
+    <string name="camera_not_shown">Failed Show Camera</string>
+    <string name="upload_failed_please_enter_photo">Upload Failed. please enter Photo</string>
 </resources>

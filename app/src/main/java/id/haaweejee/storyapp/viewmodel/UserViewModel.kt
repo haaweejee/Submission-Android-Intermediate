@@ -28,6 +28,8 @@ class UserViewModel : ViewModel(){
                 if (client.isSuccessful){
                     _registerResponse.postValue(client.body())
                     Log.d("Success: ", client.body().toString())
+                }else{
+                    _registerResponse.postValue(RegisterResponse(error = true))
                 }
             }catch (ex: Exception){
                 Log.d("ERROR", ex.toString())
@@ -42,6 +44,8 @@ class UserViewModel : ViewModel(){
                 if (client.isSuccessful){
                     _loginResponse.postValue(client.body())
                     Log.d("Success: ", client.body().toString())
+                }else{
+                    _loginResponse.postValue(LoginResponse(error = true))
                 }
             }catch (ex: Exception){
                 Log.d("ERROR", ex.toString())

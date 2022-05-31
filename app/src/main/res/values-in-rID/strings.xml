@@ -10,8 +10,8 @@
     <string name="please_login">Silahkan Masuk</string>
     <string name="application_logo">logo_aplikasi</string>
     <string name="login">Masuk</string>
-    <string name="not_have_account">Belum Punya Akun?</string>
-    <string name="please_register">Silahkan Daftar</string>
+    <string name="not_have_account"> Belum Punya Akun?</string>
+    <string name="please_register"> Silahkan Daftar</string>
     <string name="add_story_button">Tombol Tambah cerita</string>
     <string name="upload">Upload</string>
     <string name="thumnail_image">thumbnail image</string>
@@ -26,4 +26,31 @@
     <string name="story_detail">Detail Cerita</string>
     <string name="add_story">Tambah Cerita</string>
     <string name="upload_success">Upload Berhasil</string>
+    <string name="check_location">Cek Lokasi</string>
+    <string name="back_button">Tombol Kembali</string>
+    <string name="retry">Coba Lagi</string>
+    <string name="skip">LEWATI</string>
+    <string name="not_got_permission">Tidak mendapatkan permission.</string>
+    <string name="upload_failed">Upload gagal, Silahkan coba lagi</string>
+    <string name="description_not_yet_added">Belum ada deskripsi Cerita</string>
+    <string name="please_add_location">Belum ada latitude, silahkan masukkan otomatis</string>
+    <string name="longitude_not_yet_added">Belum ada longitude, silahkan masukkan otomatis</string>
+    <string name="account">Akun</string>
+    <string name="register_failed">Register Gagal</string>
+    <string name="please_enter_name">Silahkan masukkan Nama</string>
+    <string name="get_location_automate">Dapatkan Lokasi Otomatis</string>
+    <string name="look_story_subtitle">Melihat Cerita darimana photo mereka berasal</string>
+    <string name="look_story_title">Lihat Cerita</string>
+    <string name="add_story_subtitle">Bagikan Cerita anda kepada Dunia</string>
+    <string name="add_story_title">Tambahkan Cerita</string>
+    <string name="welcome_title">Selamat datang di Story app</string>
+    <string name="password_less_6_word">Password harus lebih dari 6 huruf</string>
+    <string name="please_enter_your_password">"Please Enter your "</string>
+    <string name="email_not_valid">Email tidak valid</string>
+    <string name="please_enter_your_email">Silahkan masukkan Email</string>
+    <string name="login_failed_please_try_later">Login gagal cobalah beberapa saat lagi</string>
+    <string name="failed_take_picture">Gagal Mengambil Gambar</string>
+    <string name="camera_not_shown">Gagal memunculkan kamera.</string>
+    <string name="upload_failed_please_enter_photo">Upload Gagal, Masukkan Photo</string>
+
 </resources>

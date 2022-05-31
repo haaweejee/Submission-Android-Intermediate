@@ -3,20 +3,26 @@ package id.haaweejee.storyapp.ui
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
+import id.haaweejee.storyapp.R
 import id.haaweejee.storyapp.databinding.ActivityRegisterBinding
 import id.haaweejee.storyapp.service.data.register.RegisterRequest
+import id.haaweejee.storyapp.utils.InteractionUtils.hideKeyboard
 import id.haaweejee.storyapp.viewmodel.UserViewModel
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var viewModel: UserViewModel
+    private var nameCondition = false
+    private var emailCondition = false
+    private var passwordCondition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,19 +38,19 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.btnRegister.setOnClickListener {
+            hideKeyboard()
             signUp()
         }
 
         viewModel.registerResponse.observe(this@RegisterActivity) {
             if (it.error == false) {
                 showLoading(false)
-                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 moveToLoginActivity()
                 Log.d("Results: ", it.message)
             }else{
                 showLoading(false)
                 Log.d("Results: ", it.message)
-                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, getString(R.string.register_failed), Snackbar.LENGTH_SHORT).show()
             }
 
         }
@@ -55,18 +61,65 @@ class RegisterActivity : AppCompatActivity() {
     private fun moveToLoginActivity() {
         intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun signUp() {
         val name = binding.edtName.text.toString().trim()
         val email = binding.edtEmail.text.toString().trim()
         val password = binding.edtPassword.text.toString().trim()
-        viewModel.userRegister(
-            RegisterRequest(
-                name, email, password
+
+        binding.btnRegister.isClickable = false
+
+        when{
+            name.isEmpty() -> {
+                binding.tlName.error = getString(R.string.please_enter_name)
+                nameCondition = false
+            }
+            else -> {
+                binding.tlName.error = null
+                nameCondition = true
+            }
+        }
+
+        when{
+            email.isEmpty() -> {
+                binding.tlEmail.error = getString(R.string.please_enter_your_email)
+                emailCondition = false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->{
+                binding.tlEmail.error = getString(R.string.email_not_valid)
+                emailCondition = false
+            }
+            else -> {
+                binding.tlEmail.error = null
+                emailCondition = true
+            }
+        }
+
+        when {
+            password.isEmpty() -> {
+                binding.tlPassword.error = getString(R.string.please_enter_your_password)
+                passwordCondition = false
+            }
+            password.length < 6 -> {
+                binding.tlPassword.error = getString(R.string.password_less_6_word)
+                passwordCondition = false
+            }
+            else -> {
+                binding.tlPassword.error = null
+                passwordCondition = true
+            }
+        }
+
+        if (nameCondition && emailCondition && passwordCondition) {
+            viewModel.userRegister(
+                RegisterRequest(
+                    name, email, password
+                )
             )
-        )
-        showLoading(true)
+            showLoading(true)
+        }
     }
 
     private fun showLoading(state: Boolean) {
